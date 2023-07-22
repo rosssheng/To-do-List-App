@@ -1,0 +1,100 @@
+/* to override Bootstrap styles for some things */
+
+
+.bg-image-vertical {
+position: relative;
+overflow: hidden;
+background-repeat: no-repeat;
+background-position: right center;
+background-size: auto 100%;
+}
+
+@media (min-width: 1025px) {
+.h-custom-2 {
+height: 100%;
+}
+}
+
+body {
+background-color: #333;
+color: white;
+}
+
+a {
+    color: #ffc107;
+}
+
+.jumbotron {
+  display: flex;
+  align-items: center;
+  margin: 0;
+  height: 100vh;
+  color: white;
+  background-color: #333;
+}
+
+.space-above {
+    margin-top: 20px;
+    padding-top: 20px;
+}
+
+.error-msg {
+    color: red;
+}
+
+section {
+    height: 100vh;
+}
+
+
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-control {
+    background-color: #343a40;
+    border-color: #ced4da;
+    color: #ffffff;
+}
+
+.form-control:focus {
+    background-color: #343a40;
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+
+.btn {
+    background-color: #ffc107;
+    border-color: #ffc107;
+
+}
+
+.btn:hover {
+    background-color: #ffca2c;
+    border-color: #ffca2c;
+
+}
+
+.btn:active,
+.btn:focus {
+    background-color: #ffc107;
+    border-color: #ffc107;
+    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+}
+
+.text-white {
+    color: #ffffff;
+}
+
+.text-muted {
+    color: #999999;
+}
+
+.link-info {
+    color: #ffc107;
+}
+
+.link-info:hover {
+    color: #ffca2c;
+}
