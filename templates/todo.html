@@ -7,7 +7,29 @@
       <div class="row">
         <div class="col">
           <div class="site-heading text-center mt-5">
-            <h1>My To-Dos</h1>
+            <h1>Welcome, {{ current_user.username }}!</h1>
+            <h2>Your TODOs:</h2>
+
+            {% if all_todos|length == 0 %}
+            <h3>No TODOs</h3>
+            {% else %}
+            <ul>
+            {% for todo in all_todos %}
+        <li>
+            <strong>{{ todo.title }}</strong>
+            {% if todo.priority %}
+            - Priority
+            {% endif %}
+            <br>
+            Due Date: {{ todo.due_date }}
+            <p>{{ todo.body }}</p>
+            <a href="{{ url_for('delete_todo', todo_id=todo.id) }}">Delete</a>
+        </li>
+        {% endfor %}
+    </ul>
+            {% endif %}
+
+
 
           </div>
         </div>

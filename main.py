@@ -1,4 +1,4 @@
-from flask import Flask, render_template, redirect, url_for, flash, abort
+from flask import Flask, render_template, redirect, url_for, flash, abort, request
 from flask_sqlalchemy import SQLAlchemy
 import requests
 import random
@@ -124,6 +124,36 @@ def log_out():
 
 
 # TODO: 4) Database to store todos, relational
+@app.route("/add_todo", methods=["GET", "POST"])
+@login_required
+def add_todo():
+    title = request.form['title']
+    priority = True if 'priority' in request.form else False
+    due_date = request.form['due_date']
+    body = request.form['body']
+
+    new_todo = ToDo(title=title, priority=priority, due_date=due_date, body=body, author=current_user)
+    db.session.add(new_todo)
+    db.session.commit()
+
+    flash('New TODO added successfully!', 'success')
+    return redirect(url_for('todo'))
+
+    # Route to delete a TODO
+
+
+@app.route("/delete_todo/<int:todo_id>")
+@login_required
+def delete_todo(todo_id):
+    todo_to_delete = ToDo.query.get(todo_id)
+    if todo_to_delete and todo_to_delete.author_id == current_user.id:
+        db.session.delete(todo_to_delete)
+        db.session.commit()
+        flash('TODO deleted successfully!', 'success')
+    else:
+        flash('TODO not found or you do not have permission to delete it!', 'danger')
+    return redirect(url_for('todo'))
+
 # TODO: 5) Delete TODOS
 
 if __name__ == "__main__":
