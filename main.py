@@ -6,7 +6,7 @@ from flask_bootstrap import Bootstrap5
 from forms import LoginForm, RegisterForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
-
+from sqlalchemy.orm import relationship
 
 app = Flask(__name__)
 Bootstrap5(app)
@@ -21,7 +21,7 @@ login_manager.init_app(app)
 def load_user(user_id):
     return User.query.get(int(user_id))
 
-# TODO: 1) Create User table for authentication
+
 # Tables
 class User(db.Model, UserMixin):
     __tablename__ = "users"
@@ -29,6 +29,17 @@ class User(db.Model, UserMixin):
     email = db.Column(db.String(100), unique=True)
     username = db.Column(db.String(100), unique=True, nullable=False)
     password = db.Column(db.String(100), nullable=False)
+    todos = relationship("ToDo", back_populates="author")
+
+class ToDo(db.Model):
+    __tablename__ = "todos"
+    id = db.Column(db.Integer, primary_key=True)
+    author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
+    author = relationship("User", back_populates="todos")
+    title = db.Column(db.String(250), unique=True, nullable=False)
+    priority = db.Column(db.Boolean, nullable=False)
+    due_date = db.Column(db.DateTime, nullable=False)
+    body = db.Column(db.Text, nullable=False)
 
 
 # Routes
@@ -95,16 +106,23 @@ def login():
     return render_template("login.html", form=form, current_user=current_user)
 
 @app.route("/todo")
+@login_required
 def todo():
-    return render_template("todo.html")
+    todos = ToDo.query.all()
+    return render_template("todo.html", all_todos=todos)
+
+@app.route("/about")
+@login_required
+def about():
+    return render_template("about.html", current_user=current_user)
 
 @app.route("/logout")
 def log_out():
     logout_user()
     return redirect(url_for('home'))
 
-# TODO: 2) Title Icon on pages
-# TODO: 3) Create To-Do
+
+
 # TODO: 4) Database to store todos, relational
 # TODO: 5) Delete TODOS
 
