@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}My Todos{% endblock %}
+{% block content %}{% include "header.html" %}
+
+
+ <div class="container">
+      <div class="row">
+        <div class="col">
+            {% if is_edit: %}
+            <h1>Edit Todo</h1>
+            <form method="post" action="{{ url_for('edit_todo', todo_id=todo_id) }}">
+            {% else: %}
+            <h1>New Todo</h1>
+            <form method="post" action="{{ url_for('add_todo') }}">
+                {% endif %}
+                    {{ form.csrf_token }}
+
+
+                    <!-- Render the priority field -->
+                    <div class="form-outline mb-4">
+                        {{ form.priority.label }}
+                        {{ form.priority(checked='checked')}}
+
+                    </div>
+
+                    <!-- Render the title field -->
+                    <div class="form-outline mb-4">
+                        {{ form.title.label }}
+                        {{ form.title(class="form-control form-control-lg", id="title") }}
+
+
+                    </div>
+
+
+
+                    <!-- Render the due date field -->
+                    <div class="form-outline mb-4">
+                        {{ form.due_date.label }}
+                        {{ form.due_date(class="form-control form-control-lg", id="due_date") }}
+
+                    </div>
+
+                    <!-- Render the comments field -->
+                    <div class="form-outline mb-4">
+                        {{ form.body.label }}
+                        {{ form.body(class="form-control form-control-lg", id="comments") }}
+
+                    </div>
+
+                    <div class="pt-1 mb-4">
+                        {{ form.submit(class="btn btn-warning btn-lg btn-block") }}
+                    </div>
+
+                </form>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% include "footer.html" %}
+{% endblock %}

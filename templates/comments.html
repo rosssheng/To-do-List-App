@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}{{todo.title}}{% endblock %}
+{% block content %}{% include "header.html" %}
+
+
+ <div class="container">
+      <div class="row">
+        <div class="col">
+            <h1>{{todo.title}}</h1>
+
+{{todo.body}}
+            {{todo.priority}}
+            {{todo.due_date.strftime("%Y-%m-%d")}}
+
+{% include "footer.html" %}
+{% endblock %}

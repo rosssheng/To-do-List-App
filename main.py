@@ -3,10 +3,11 @@ from flask_sqlalchemy import SQLAlchemy
 import requests
 import random
 from flask_bootstrap import Bootstrap5
-from forms import LoginForm, RegisterForm
+from forms import LoginForm, RegisterForm, TodoForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
 from sqlalchemy.orm import relationship
+from datetime import datetime
 
 app = Flask(__name__)
 Bootstrap5(app)
@@ -55,13 +56,11 @@ def register():
         existing_user = User.query.filter_by(email=form.email.data).first()
         if existing_user:
             flash('Email already registered!', 'danger')
-            print('Email already registered!')
             return redirect(url_for('register'))
 
         existing_username = User.query.filter_by(username=form.username.data).first()
         if existing_username:
             flash('Username already taken!', 'danger')
-            print('Username already taken!!')
             return redirect(url_for('register'))
 
         hash_and_salted_password = generate_password_hash(
@@ -123,23 +122,27 @@ def log_out():
 
 
 
-# TODO: 4) Database to store todos, relational
 @app.route("/add_todo", methods=["GET", "POST"])
 @login_required
 def add_todo():
-    title = request.form['title']
-    priority = True if 'priority' in request.form else False
-    due_date = request.form['due_date']
-    body = request.form['body']
+    form = TodoForm()
+    if form.validate_on_submit():
+        title = form.title.data
+        priority = form.priority.data
+        due_date = form.due_date.data
+        body = form.body.data
+        new_todo = ToDo(
+            title=title,
+            priority=priority,
+            due_date=due_date,
+            body=body,
+            author=current_user)
+        db.session.add(new_todo)
+        db.session.commit()
 
-    new_todo = ToDo(title=title, priority=priority, due_date=due_date, body=body, author=current_user)
-    db.session.add(new_todo)
-    db.session.commit()
+        return redirect(url_for('todo'))
+    return render_template("add_todo.html", form=form, current_user=current_user)
 
-    flash('New TODO added successfully!', 'success')
-    return redirect(url_for('todo'))
-
-    # Route to delete a TODO
 
 
 @app.route("/delete_todo/<int:todo_id>")
@@ -149,12 +152,41 @@ def delete_todo(todo_id):
     if todo_to_delete and todo_to_delete.author_id == current_user.id:
         db.session.delete(todo_to_delete)
         db.session.commit()
-        flash('TODO deleted successfully!', 'success')
+
     else:
         flash('TODO not found or you do not have permission to delete it!', 'danger')
     return redirect(url_for('todo'))
 
-# TODO: 5) Delete TODOS
+@app.route("/edit_todo/<int:todo_id>", methods=["GET", "POST"])
+@login_required
+def edit_todo(todo_id):
+    todo_to_edit = ToDo.query.get(todo_id)
+    date = todo_to_edit.due_date.date()
+
+    edit_form = TodoForm(
+        title= todo_to_edit.title,
+        priority = todo_to_edit.priority,
+        author = current_user,
+        due_date = date,
+        body = todo_to_edit.body
+
+    )
+    if edit_form.validate_on_submit():
+        todo_to_edit.title = edit_form.title.data
+        todo_to_edit.priority = edit_form.priority.data
+        todo_to_edit.due_date = edit_form.due_date.data
+        todo_to_edit.body = edit_form.body.data
+        db.session.commit()
+        return redirect(url_for('show_todo', todo_id=todo_id))
+
+    return render_template("add_todo.html", form = edit_form, is_edit=True, current_user=current_user,todo_id=todo_id)
+
+
+@app.route("/todo/<int:todo_id>")
+def show_todo(todo_id):
+    todo = ToDo.query.get(todo_id)
+
+    return render_template("comments.html", todo=todo, current_user=current_user)
 
 if __name__ == "__main__":
     app.run(debug=True)
