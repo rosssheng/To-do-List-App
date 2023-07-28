@@ -2,9 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../Cafe-and-Wifi-Website/.idea/Cafe-and-Wifi-Website.iml" filepath="$PROJECT_DIR$/../Cafe-and-Wifi-Website/.idea/Cafe-and-Wifi-Website.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/To-do-List-App.iml" filepath="$PROJECT_DIR$/.idea/To-do-List-App.iml" />
-      <module fileurl="file://$USER_HOME$/Downloads/blog-with-users-end/.idea/blog-with-users-end.iml" filepath="$USER_HOME$/Downloads/blog-with-users-end/.idea/blog-with-users-end.iml" />
     </modules>
   </component>
 </project>
