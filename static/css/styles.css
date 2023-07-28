@@ -1,5 +1,9 @@
 /* to override Bootstrap styles for some things */
 
+.todo-title-container {
+        margin-right: 1em;
+    }
+
  .todo-title {
     color: black;
   }
@@ -103,9 +107,10 @@ section {
 }
 
 .form-control:focus {
+    color: white;
     background-color: #343a40;
     border-color: #ffc107;
-    box-shadow: 0 0 0 0.25rem rgba(255, 193, 7, 0.25);
+
 }
 
 .btn {

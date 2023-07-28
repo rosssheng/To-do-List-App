@@ -179,7 +179,7 @@ def edit_todo(todo_id):
         db.session.commit()
         return redirect(url_for('show_todo', todo_id=todo_id))
 
-    return render_template("add_todo.html", form = edit_form, is_edit=True, current_user=current_user,todo_id=todo_id)
+    return render_template("add_todo.html", form = edit_form, is_edit=True, name=todo_to_edit.title, current_user=current_user,todo_id=todo_id)
 
 
 @app.route("/todo/<int:todo_id>")

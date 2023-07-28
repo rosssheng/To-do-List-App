@@ -7,7 +7,7 @@
       <div class="row">
         <div class="col">
             {% if is_edit: %}
-            <h1>Edit Todo</h1>
+            <h1>Edit {{name}}</h1>
             <form method="post" action="{{ url_for('edit_todo', todo_id=todo_id) }}">
             {% else: %}
             <h1>New Todo</h1>

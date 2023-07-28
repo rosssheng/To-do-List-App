@@ -3,14 +3,43 @@
 {% block content %}{% include "header.html" %}
 
 
- <div class="container">
-      <div class="row">
+<div class="container">
+    <div class="row">
         <div class="col">
-            <h1>{{todo.title}}</h1>
+            <div class="site-heading text-center mt-5">
+                <div class="todo-title-container" style="display: inline-block;">
+                    <h1>{{todo.title}}</h1>
+                </div>
 
-{{todo.body}}
-            {{todo.priority}}
-            {{todo.due_date.strftime("%Y-%m-%d")}}
+                <!-- Dropdown Code -->
+                <div class="dropdown" style="display: inline-block;">
+                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="{{url_for('edit_todo',todo_id=todo.id)}}">Edit</a>
+                        <a class="dropdown-item" href="{{url_for('delete_todo',todo_id=todo.id)}}">Delete</a>
+                    </div>
+                </div>
+
+                {% if todo.priority %}
+                    <h2>This task is a priority!</h2>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col text-center mt-5">
+            Due Date: {{todo.due_date.strftime("%Y-%m-%d")}}
+        </div>
+        <div class="col text-center mt-5">
+            Comments: {{todo.body}}
+        </div>
+    </div>
+</div>
+
 
 {% include "footer.html" %}
 {% endblock %}
