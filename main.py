@@ -2,7 +2,7 @@ from flask import Flask, render_template, redirect, url_for, flash, abort, reque
 from flask_sqlalchemy import SQLAlchemy
 import requests
 import random
-from flask_bootstrap import Bootstrap5
+from flask_bootstrap import Bootstrap
 from forms import LoginForm, RegisterForm, TodoForm
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_user, LoginManager, login_required, current_user, logout_user
@@ -10,7 +10,7 @@ from sqlalchemy.orm import relationship
 from datetime import datetime
 
 app = Flask(__name__)
-Bootstrap5(app)
+Bootstrap(app)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///users.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = '8BYkEfBA6O6donzWlSihBXox7C0sKR6b'
@@ -41,6 +41,7 @@ class ToDo(db.Model):
     priority = db.Column(db.Boolean, nullable=False)
     due_date = db.Column(db.DateTime, nullable=False)
     body = db.Column(db.Text, nullable=False)
+
 
 
 # Routes
@@ -189,4 +190,5 @@ def show_todo(todo_id):
     return render_template("comments.html", todo=todo, current_user=current_user)
 
 if __name__ == "__main__":
+
     app.run(debug=True)
