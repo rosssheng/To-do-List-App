@@ -13,9 +13,9 @@ from flask_migrate import Migrate
 
 app = Flask(__name__)
 Bootstrap(app)
-app.config['SQLALCHEMY_DATABASE_URI'] =os.environ.get("DATABASE_URL1")
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get("DATABASE_URL1", "sqlite:///users.db")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY")
+app.config['SECRET_KEY'] = os.environ.get("SECRET_KEY", "8BYkEfBA6O6donzWlSihBXox7C0sKR6b")
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 
@@ -40,12 +40,11 @@ class ToDo(db.Model):
     __tablename__ = "todos"
     id = db.Column(db.Integer, primary_key=True)
     author_id = db.Column(db.Integer, db.ForeignKey("users.id"))
-    author = relationship("User", back_populates="todos")
     title = db.Column(db.String(250), unique=True, nullable=False)
     priority = db.Column(db.Boolean, nullable=False)
     due_date = db.Column(db.DateTime, nullable=False)
     body = db.Column(db.Text, nullable=False)
-
+    author = relationship("User", back_populates="todos")
 
 
 # Routes
@@ -112,7 +111,8 @@ def login():
 @app.route("/todo")
 @login_required
 def todo():
-    todos = ToDo.query.all()
+    todos = ToDo.query.filter_by(author=current_user).all()
+    print(todos)
     return render_template("todo.html", all_todos=todos)
 
 @app.route("/about")
