@@ -112,7 +112,7 @@ def login():
 @login_required
 def todo():
     todos = ToDo.query.filter_by(author=current_user).all()
-    print(todos)
+
     return render_template("todo.html", all_todos=todos)
 
 @app.route("/about")
